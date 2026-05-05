@@ -2,7 +2,7 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
 
-  background: url('Image/bg.jpg') no-repeat center center fixed;
+  background: url("Image/bg.jpg") no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -144,7 +144,7 @@ header {
 /* Hero */
 .hero {
     height: 90vh;
-    background: url('images/sports.jpg') no-repeat center/cover;
+    background: url('Images/sports.jpg') no-repeat center/cover;
     color: white;
     text-align: center;
     padding-top: 200px;
