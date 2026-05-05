@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Youth Vision Udugampolagedra</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <div class="top-nav">
+    <div class="nav-left">
+      <img src="image/Logo.jpeg" alt="Logo">
+    </div>
+
+    <div class="nav-center">
+      Youth Vision Udugampolagedra
+    </div>
+
+    <div class="nav-right">
+      <a href="#">Login</a>
+      <a href="#">Signup</a>
+    </div>
+  </div>
+
+  <div class="main-nav">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Members</a></li>
+      <li><a href="#">News</a></li>
+      <li><a href="#">Events</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- Players Section -->
+<section class="players-section">
+
+  <h2>UPL 2026 Team Cards</h2>
+
+  <!-- GRID CONTAINER -->
+<div class="players-grid">
+
+  <!-- ROW 1 -->
+  <div class="row">
+    
+    <div class="player-card">
+      <div class="player-image">
+        <img src="image/Falcons.png" alt="Falcons">
+      </div>
+      <div class="player-details">
+        <h3>Udugampolagedara Falcons</h3>
+      </div>
+    </div>
+
+    <div class="player-card">
+      <div class="player-image">
+        <img src="image/Warriors.png" alt="Warriors">
+      </div>
+      <div class="player-details">
+        <h3>Udugampolagedara Warriors</h3>
+      </div>
+    </div>
+
+    <div class="player-card">
+      <div class="player-image">
+        <img src="image/Titans.jpeg" alt="Titans">
+      </div>
+      <div class="player-details">
+        <h3>Udugampolagedara Titans</h3>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 2 (CENTERED) -->
+  <div class="row center">
+
+    <div class="player-card">
+      <div class="player-image">
+        <img src="image/Kings.jpeg" alt="Kings">
+      </div>
+      <div class="player-details">
+        <h3>Udugampolagedara Kings</h3>
+      </div>
+    </div>
+
+    <div class="player-card">
+      <div class="player-image">
+        <img src="image/Strikers.jpeg" alt="Strikers">
+      </div>
+      <div class="player-details">
+        <h3>Udugampolagedara Strikers</h3>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</section>
+
+<!-- MATCH PANEL -->
+<div class="match-panel">
+  <h3>Update Match</h3>
+
+  <select id="teamA"></select>
+  <span>vs</span>
+  <select id="teamB"></select>
+
+  <br><br>
+
+  <input type="number" id="runsA" placeholder="Team A Runs">
+  <input type="text" id="oversA" placeholder="Overs (e.g. 4.3)">
+
+  <input type="number" id="runsB" placeholder="Team B Runs">
+  <input type="text" id="oversB" placeholder="Overs (e.g. 4.3)">
+
+  <br><br>
+
+  <select id="winner"></select>
+
+  <br><br>
+
+  <button onclick="submitMatch()">Update</button>
+
+  <button onclick="resetTournament()" style="background:red;color:white;margin-left:10px;">
+    Reset
+  </button>
+
+  <button onclick="undoLastMatch()" style="background:#555;color:white;margin-left:10px;">
+  Undo Last Match
+</button>
+</div>
+
+<!-- POINT TABLE -->
+<section class="points-section">
+  <h2>Points Table</h2>
+
+  <table class="points-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Team</th>
+        <th>P</th>
+        <th>W</th>
+        <th>L</th>
+        <th>Pts</th>
+        <th>NRR</th>
+      </tr>
+    </thead>
+    <tbody id="pointsTable"></tbody>
+  </table>
+</section>
+
+<!-- MATCH HISTORY -->
+<section class="history-section">
+  <h2>Match History</h2>
+
+  <table class="points-table">
+    <thead>
+      <tr>
+        <th>Match</th>
+        <th>Score</th>
+        <th>Winner</th>
+      </tr>
+    </thead>
+    <tbody id="historyTable"></tbody>
+  </table>
+</section>
+
+<script>
+
+let teams = [];
+let matchHistory = [];
+
+// default teams
+function getDefaultTeams() {
+  return [
+    { name: "Udugampolagedara Falcons", played:0, win:0, loss:0, points:0, runsFor:0, oversFaced:0, runsAgainst:0, oversBowled:0, nrr:0 },
+    { name: "Udugampolagedara Strikers", played:0, win:0, loss:0, points:0, runsFor:0, oversFaced:0, runsAgainst:0, oversBowled:0, nrr:0 },
+    { name: "Udugampolagedara Warriors", played:0, win:0, loss:0, points:0, runsFor:0, oversFaced:0, runsAgainst:0, oversBowled:0, nrr:0 },
+    { name: "Udugampolagedara Kings", played:0, win:0, loss:0, points:0, runsFor:0, oversFaced:0, runsAgainst:0, oversBowled:0, nrr:0 },
+    { name: "Udugampolagedara Titans", played:0, win:0, loss:0, points:0, runsFor:0, oversFaced:0, runsAgainst:0, oversBowled:0, nrr:0 }
+  ];
+}
+
+// LOAD
+function loadData() {
+  let t = localStorage.getItem("teams");
+  let h = localStorage.getItem("history");
+
+  teams = t ? JSON.parse(t) : getDefaultTeams();
+  matchHistory = h ? JSON.parse(h) : [];
+}
+
+// SAVE
+function saveData() {
+  localStorage.setItem("teams", JSON.stringify(teams));
+  localStorage.setItem("history", JSON.stringify(matchHistory));
+}
+
+// OVERS CONVERT
+function convertOvers(input) {
+  if (!input) return 0;
+
+  let parts = input.toString().split(".");
+  let o = parseInt(parts[0]) || 0;
+  let b = parseInt(parts[1]) || 0;
+
+  if (b >= 6) {
+    o += Math.floor(b / 6);
+    b = b % 6;
+  }
+
+  return o + (b / 6);
+}
+
+// SORT
+function sortTable() {
+  teams.sort((a,b)=>{
+    if(b.points === a.points) return b.nrr - a.nrr;
+    return b.points - a.points;
+  });
+}
+
+// RENDER POINTS
+function renderTable() {
+  let table = document.getElementById("pointsTable");
+  table.innerHTML = "";
+
+  teams.forEach((t,i)=>{
+    table.innerHTML += `
+      <tr>
+        <td>${i+1}</td>
+        <td>${t.name}</td>
+        <td>${t.played}</td>
+        <td>${t.win}</td>
+        <td>${t.loss}</td>
+        <td>${t.points}</td>
+        <td>${t.nrr}</td>
+      </tr>
+    `;
+  });
+}
+
+// HISTORY RENDER
+function renderHistory() {
+  let table = document.getElementById("historyTable");
+  table.innerHTML = "";
+
+  matchHistory.forEach(m=>{
+    table.innerHTML += `
+      <tr>
+        <td>${m.teamA} vs ${m.teamB}</td>
+        <td>
+  ${m.runsA} (${m.oversA}) 
+  vs 
+  ${m.runsB} (${m.oversB})
+</td>
+        <td>${m.winner}</td>
+      </tr>
+    `;
+  });
+}
+
+// DROPDOWN
+function loadTeamsToDropdowns() {
+  let a=document.getElementById("teamA");
+  let b=document.getElementById("teamB");
+  let w=document.getElementById("winner");
+
+  teams.forEach(t=>{
+    a.add(new Option(t.name,t.name));
+    b.add(new Option(t.name,t.name));
+    w.add(new Option(t.name,t.name));
+  });
+}
+
+// NRR
+function calculateNRR(t){
+  if(t.oversFaced===0||t.oversBowled===0){t.nrr=0;return;}
+  let rf=t.runsFor/t.oversFaced;
+  let ra=t.runsAgainst/t.oversBowled;
+  t.nrr=(rf-ra).toFixed(2);
+}
+
+// MATCH
+function isValidOvers(input, maxOvers = 5) {
+
+  if (!input) return false;
+
+  let parts = input.toString().split(".");
+  let overs = parseInt(parts[0]);
+  let balls = parts[1] ? parseInt(parts[1]) : 0;
+
+  if (isNaN(overs) || isNaN(balls)) return false;
+
+  // balls must be 0–5
+  if (balls < 0 || balls > 5) return false;
+
+  // overs limit
+  if (overs > maxOvers) return false;
+
+  // cannot exceed max (like 5.1)
+  if (overs === maxOvers && balls > 0) return false;
+
+  return true;
+}
+
+
+function submitMatch(){
+
+  let teamA=document.getElementById("teamA").value;
+  let teamB=document.getElementById("teamB").value;
+  let winner=document.getElementById("winner").value;
+
+let runsA = parseFloat(document.getElementById("runsA").value) || 0;
+let runsB = parseFloat(document.getElementById("runsB").value) || 0;
+
+let oversAInput = document.getElementById("oversA").value;
+let oversBInput = document.getElementById("oversB").value;
+
+// 🔴 basic check
+if (!oversAInput || !oversBInput) {
+  alert("Please enter overs for both teams");
+  return;
+}
+
+// 🔴 validation
+if (!isValidOvers(oversAInput) || !isValidOvers(oversBInput)) {
+  alert("Invalid overs!\n\nRules:\n- Max 5 overs\n- Balls must be 0–5\n- Examples: 4.5, 3.2, 5");
+  return;
+}
+
+// ✅ convert ONLY ONCE
+let oversA = convertOvers(oversAInput);
+let oversB = convertOvers(oversBInput);
+
+// ✅ FIX: add back team references
+let t1 = teams.find(t => t.name === teamA);
+let t2 = teams.find(t => t.name === teamB);
+
+if (!t1 || !t2) {
+  alert("Team not found");
+  return;
+}
+
+  t1.played++; t2.played++;
+
+  t1.runsFor+=runsA;
+  t1.oversFaced+=oversA;
+  t1.runsAgainst+=runsB;
+  t1.oversBowled+=oversB;
+
+  t2.runsFor+=runsB;
+  t2.oversFaced+=oversB;
+  t2.runsAgainst+=runsA;
+  t2.oversBowled+=oversA;
+
+  if(winner===teamA){
+    t1.win++;t1.points+=2;t2.loss++;
+  }else{
+    t2.win++;t2.points+=2;t1.loss++;
+  }
+
+  calculateNRR(t1);
+  calculateNRR(t2);
+
+  // history add
+  matchHistory.push({
+  teamA,
+  teamB,
+  runsA,
+  runsB,
+  oversA: document.getElementById("oversA").value,
+  oversB: document.getElementById("oversB").value,
+  winner
+});
+
+  sortTable();
+  renderTable();
+  renderHistory();
+  saveData();
+}
+
+function undoLastMatch(){
+
+  if (matchHistory.length === 0) {
+    alert("No matches to undo");
+    return;
+  }
+
+  if (!confirm("Undo last match?")) return;
+
+  // remove last match
+  matchHistory.pop();
+
+  // reset teams
+  teams = getDefaultTeams();
+
+  // replay matches
+  matchHistory.forEach(m => {
+
+    let t1 = teams.find(t => t.name === m.teamA);
+    let t2 = teams.find(t => t.name === m.teamB);
+
+    let runsA = m.runsA;
+    let runsB = m.runsB;
+
+    let oversA = convertOvers(m.oversA);
+    let oversB = convertOvers(m.oversB);
+
+    t1.played++; t2.played++;
+
+    t1.runsFor += runsA;
+    t1.oversFaced += oversA;
+    t1.runsAgainst += runsB;
+    t1.oversBowled += oversB;
+
+    t2.runsFor += runsB;
+    t2.oversFaced += oversB;
+    t2.runsAgainst += runsA;
+    t2.oversBowled += oversA;
+
+    if (m.winner === m.teamA) {
+      t1.win++; t1.points += 2; t2.loss++;
+    } else {
+      t2.win++; t2.points += 2; t1.loss++;
+    }
+
+    calculateNRR(t1);
+    calculateNRR(t2);
+  });
+
+  sortTable();
+  renderTable();
+  renderHistory();
+  saveData();
+}
+// RESET
+function resetTournament(){
+  if(!confirm("Reset everything?")) return;
+
+  teams=getDefaultTeams();
+  matchHistory=[];
+
+  localStorage.clear();
+
+  sortTable();
+  renderTable();
+  renderHistory();
+}
+
+// INIT
+loadData();
+loadTeamsToDropdowns();
+sortTable();
+renderTable();
+renderHistory();
+
+</script>
+
+</body>
+</html>
