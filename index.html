@@ -479,57 +479,8 @@ await supabase
 
 async function undoLastMatch(){
 
-  if (matchHistory.length === 0) {
-    alert("No matches to undo");
-    return;
-  }
+  alert("Undo feature coming soon");
 
-  if (!confirm("Undo last match?")) return;
-
-  // remove last match
-  matchHistory.pop();
-
-  // reset teams
-  teams = getDefaultTeams();
-
-  // replay matches
-  matchHistory.forEach(m => {
-
-    let t1 = teams.find(t => t.name === m.teamA);
-    let t2 = teams.find(t => t.name === m.teamB);
-
-    let runsA = m.runsA;
-    let runsB = m.runsB;
-
-    let oversA = convertOvers(m.oversA);
-    let oversB = convertOvers(m.oversB);
-
-    t1.played++; t2.played++;
-
-    t1.runsFor += runsA;
-    t1.oversFaced += oversA;
-    t1.runsAgainst += runsB;
-    t1.oversBowled += oversB;
-
-    t2.runsFor += runsB;
-    t2.oversFaced += oversB;
-    t2.runsAgainst += runsA;
-    t2.oversBowled += oversA;
-
-    if (m.winner === m.teamA) {
-      t1.win++; t1.points += 2; t2.loss++;
-    } else {
-      t2.win++; t2.points += 2; t1.loss++;
-    }
-
-    calculateNRR(t1);
-    calculateNRR(t2);
-
-   
-  sortTable();
-  renderTable();
-  renderHistory();
-  
 }
 // RESET
 function resetTournament(){
