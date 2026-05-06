@@ -637,3 +637,56 @@ header {
   }
 
 }
+
+/* =========================
+   MOBILE HEADER FIX
+========================= */
+
+@media screen and (max-width: 768px){
+
+  /* TOP NAV */
+  .top-nav{
+    grid-template-columns: 1fr;
+    text-align:center;
+    gap:12px;
+    padding:15px 10px;
+  }
+
+  /* LOGO */
+  .nav-left img{
+    height:70px;
+  }
+
+  /* CLUB NAME */
+  .nav-center{
+    font-size:18px;
+    line-height:1.4;
+    letter-spacing:1px;
+
+    word-break:break-word;
+    overflow-wrap:break-word;
+
+    padding:0 10px;
+  }
+
+  /* RIGHT MENU */
+  .nav-right{
+    text-align:center;
+  }
+
+  .nav-right a{
+    margin:0 8px;
+    font-size:14px;
+  }
+
+  /* MAIN NAV */
+  .main-nav ul{
+    flex-wrap:wrap;
+    gap:15px;
+  }
+
+  .main-nav a{
+    font-size:15px;
+  }
+
+}
