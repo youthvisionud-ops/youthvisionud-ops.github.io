@@ -476,7 +476,7 @@ header {
 }
 
 /* RESPONSIVE (MOBILE) */
-@media (max-width: 600px) {
+@media (max-width: 500px) {
   .match-panel input[type="number"],
   .match-panel input[type="text"] {
     width: 100%;
