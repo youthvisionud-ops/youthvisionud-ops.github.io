@@ -489,16 +489,46 @@ async function undoLastMatch(){
 
 }
 // RESET
-function resetTournament(){
+async function resetTournament(){
+
   if(!confirm("Reset everything?")) return;
 
-  teams=getDefaultTeams();
-  matchHistory=[];
+  // RESET LOCAL
+  teams = getDefaultTeams();
+  matchHistory = [];
 
+  // RESET TEAMS IN DATABASE
+  for (const t of teams) {
 
+    await client
+      .from("teams")
+      .update({
+        played: 0,
+        win: 0,
+        loss: 0,
+        points: 0,
+        nrr: 0,
+        runsfor: 0,
+        oversfaced: 0,
+        runsagainst: 0,
+        oversbowled: 0
+      })
+      .eq("name", t.name);
+  }
+
+  // DELETE MATCH HISTORY
+  await client
+    .from("matches")
+    .delete()
+    .neq("id", 0);
+
+  // REFRESH UI
   sortTable();
   renderTable();
   renderHistory();
+
+  alert("Tournament Reset Successful");
+
 }
 // ADMIN LOGIN
 
