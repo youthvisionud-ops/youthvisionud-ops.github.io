@@ -470,13 +470,72 @@ function resetTournament(){
   renderTable();
   renderHistory();
 }
+// ADMIN LOGIN
 
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "upl2026";
+
+function showLogin(){
+  document.getElementById("loginModal").style.display = "block";
+}
+
+function closeLogin(){
+  document.getElementById("loginModal").style.display = "none";
+}
+
+function login(){
+
+  let user = document.getElementById("adminUser").value;
+  let pass = document.getElementById("adminPass").value;
+
+  if(user === ADMIN_USERNAME && pass === ADMIN_PASSWORD){
+
+    localStorage.setItem("isAdmin", "true");
+
+    document.getElementById("matchPanel").style.display = "block";
+
+    document.getElementById("logoutBtn").style.display = "inline-block";
+
+    closeLogin();
+
+    alert("Login Successful");
+
+  }else{
+    alert("Invalid Username or Password");
+  }
+}
+
+function logout(){
+
+  localStorage.removeItem("isAdmin");
+
+  document.getElementById("matchPanel").style.display = "none";
+
+  document.getElementById("logoutBtn").style.display = "none";
+
+  alert("Logged Out");
+}
+
+// CHECK LOGIN
+function checkAdmin(){
+
+  let isAdmin = localStorage.getItem("isAdmin");
+
+  if(isAdmin === "true"){
+
+    document.getElementById("matchPanel").style.display = "block";
+
+    document.getElementById("logoutBtn").style.display = "inline-block";
+  }
+}
+  
 // INIT
 loadData();
 loadTeamsToDropdowns();
 sortTable();
 renderTable();
 renderHistory();
+checkAdmin();
 
 </script>
 
