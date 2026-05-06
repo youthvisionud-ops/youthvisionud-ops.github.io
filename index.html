@@ -333,10 +333,19 @@ function loadTeamsToDropdowns() {
 
 // NRR
 function calculateNRR(t){
-  if(t.oversFaced===0||t.oversBowled===0){t.nrr=0;return;}
-  let rf=t.runsFor/t.oversFaced;
-  let ra=t.runsAgainst/t.oversBowled;
-  t.nrr=(rf-ra).toFixed(2);
+
+  if(t.oversFaced <= 0 || t.oversBowled <= 0){
+    t.nrr = 0;
+    return;
+  }
+
+  const runRateFor = t.runsFor / t.oversFaced;
+
+  const runRateAgainst = t.runsAgainst / t.oversBowled;
+
+  t.nrr = parseFloat(
+    (runRateFor - runRateAgainst).toFixed(2)
+  );
 }
 
 // MATCH
