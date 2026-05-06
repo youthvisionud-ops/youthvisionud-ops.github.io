@@ -232,10 +232,7 @@ async function loadData() {
 }
 
 // SAVE
-function saveData() {
-  localStorage.setItem("teams", JSON.stringify(teams));
-  localStorage.setItem("history", JSON.stringify(matchHistory));
-}
+
 
 // OVERS CONVERT
 function convertOvers(input) {
@@ -548,12 +545,22 @@ function checkAdmin(){
 }
   
 // INIT
-loadData();
-loadTeamsToDropdowns();
-sortTable();
-renderTable();
-renderHistory();
-checkAdmin();
+async function init(){
+
+  await loadData();
+
+  loadTeamsToDropdowns();
+
+  sortTable();
+
+  renderTable();
+
+  renderHistory();
+
+  checkAdmin();
+}
+
+init();
 
 </script>
 
