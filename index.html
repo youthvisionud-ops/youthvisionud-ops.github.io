@@ -343,7 +343,7 @@ function isValidOvers(input, maxOvers = 5) {
 }
 
 
-function submitMatch(){
+async function submitMatch(){
 
   let teamA=document.getElementById("teamA").value;
   let teamB=document.getElementById("teamB").value;
@@ -411,6 +411,20 @@ if (!t1 || !t2) {
   oversB: document.getElementById("oversB").value,
   winner
 });
+
+  await supabase
+.from("matches")
+.insert([
+  {
+    teama: teamA,
+    teamb: teamB,
+    runsa: runsA,
+    runsb: runsB,
+    oversa: oversAInput,
+    oversb: oversBInput,
+    winner: winner
+  }
+]);
 
   sortTable();
   renderTable();
