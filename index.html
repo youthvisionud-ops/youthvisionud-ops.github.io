@@ -188,13 +188,13 @@
   </table>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
 
 const supabaseUrl = "https://jqqvxreeymzkyxbjifvn.supabase.co";
 const supabaseKey = "sb_publishable_BGiDE5OzjcFID5IaDkrTRg_qxhZc25a";
 
-const supabase = window.supabase.createClient(
+const supabase = supabase.createClient(
   supabaseUrl,
   supabaseKey
 );
@@ -217,27 +217,33 @@ function getDefaultTeams() {
 async function loadData() {
 
   // LOAD TEAMS
-  let { data: teamsData } = await supabase
+  const { data: teamsData, error: teamsError } = await supabase
     .from("teams")
     .select("*");
 
+  console.log("Teams:", teamsData);
+  console.log("Teams Error:", teamsError);
+
   teams = (teamsData || []).map(t => ({
-  name: t.name,
-  played: t.played,
-  win: t.win,
-  loss: t.loss,
-  points: t.points,
-  nrr: t.nrr,
-  runsFor: t.runsfor,
-  oversFaced: t.oversfaced,
-  runsAgainst: t.runsagainst,
-  oversBowled: t.oversbowled
-}));
+    name: t.name,
+    played: t.played,
+    win: t.win,
+    loss: t.loss,
+    points: t.points,
+    nrr: t.nrr,
+    runsFor: t.runsfor,
+    oversFaced: t.oversfaced,
+    runsAgainst: t.runsagainst,
+    oversBowled: t.oversbowled
+  }));
 
   // LOAD MATCHES
-  let { data: matchData } = await supabase
+  const { data: matchData, error: matchError } = await supabase
     .from("matches")
     .select("*");
+
+  console.log("Matches:", matchData);
+  console.log("Match Error:", matchError);
 
   matchHistory = matchData || [];
 }
