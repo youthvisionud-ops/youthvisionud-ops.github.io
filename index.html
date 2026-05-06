@@ -191,7 +191,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script>
 
-const supabaseUrl = "https://jqqvxreeymzkyxbjifvn.supabase.co/rest/v1/";
+const supabaseUrl = "https://jqqvxreeymzkyxbjifvn.supabase.co";
 const supabaseKey = "sb_publishable_BGiDE5OzjcFID5IaDkrTRg_qxhZc25a";
 
 const supabase = window.supabase.createClient(
@@ -221,7 +221,18 @@ async function loadData() {
     .from("teams")
     .select("*");
 
-  teams = teamsData || [];
+  teams = (teamsData || []).map(t => ({
+  name: t.name,
+  played: t.played,
+  win: t.win,
+  loss: t.loss,
+  points: t.points,
+  nrr: t.nrr,
+  runsFor: t.runsfor,
+  oversFaced: t.oversfaced,
+  runsAgainst: t.runsagainst,
+  oversBowled: t.oversbowled
+}));
 
   // LOAD MATCHES
   let { data: matchData } = await supabase
@@ -280,18 +291,21 @@ function renderTable() {
 
 // HISTORY RENDER
 function renderHistory() {
+
   let table = document.getElementById("historyTable");
+
   table.innerHTML = "";
 
   matchHistory.forEach(m=>{
+
     table.innerHTML += `
       <tr>
-        <td>${m.teamA} vs ${m.teamB}</td>
+        <td>${m.teama} vs ${m.teamb}</td>
         <td>
-  ${m.runsA} (${m.oversA}) 
-  vs 
-  ${m.runsB} (${m.oversB})
-</td>
+          ${m.runsa} (${m.oversa})
+          vs
+          ${m.runsb} (${m.oversb})
+        </td>
         <td>${m.winner}</td>
       </tr>
     `;
@@ -429,7 +443,7 @@ if (!t1 || !t2) {
   sortTable();
   renderTable();
   renderHistory();
-  saveData();
+  
 }
 
 function undoLastMatch(){
@@ -479,12 +493,42 @@ function undoLastMatch(){
 
     calculateNRR(t1);
     calculateNRR(t2);
+
+    await supabase
+.from("teams")
+.update({
+  played: t1.played,
+  win: t1.win,
+  loss: t1.loss,
+  points: t1.points,
+  nrr: t1.nrr,
+  runsfor: t1.runsFor,
+  oversfaced: t1.oversFaced,
+  runsagainst: t1.runsAgainst,
+  oversbowled: t1.oversBowled
+})
+.eq("name", t1.name);
+
+await supabase
+.from("teams")
+.update({
+  played: t2.played,
+  win: t2.win,
+  loss: t2.loss,
+  points: t2.points,
+  nrr: t2.nrr,
+  runsfor: t2.runsFor,
+  oversfaced: t2.oversFaced,
+  runsagainst: t2.runsAgainst,
+  oversbowled: t2.oversBowled
+})
+.eq("name", t2.name);
   });
 
   sortTable();
   renderTable();
   renderHistory();
-  saveData();
+  
 }
 // RESET
 function resetTournament(){
@@ -493,7 +537,6 @@ function resetTournament(){
   teams=getDefaultTeams();
   matchHistory=[];
 
-  localStorage.clear();
 
   sortTable();
   renderTable();
@@ -505,7 +548,7 @@ const ADMIN_USERNAME = "admin";
 const ADMIN_PASSWORD = "upl2026";
 
 function showLogin(){
-  document.getElementById("loginModal").style.display = "block";
+  document.getElementById("loginModal").style.display = "flex";
 }
 
 function closeLogin(){
