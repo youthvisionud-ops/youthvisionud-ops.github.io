@@ -516,3 +516,35 @@ header {
     width: 100%;
   }
 } 
+
+.login-modal{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
+  z-index:999;
+}
+
+.login-box{
+  background:white;
+  width:300px;
+  padding:20px;
+  border-radius:10px;
+  margin:120px auto;
+  text-align:center;
+}
+
+.login-box input{
+  width:90%;
+  padding:10px;
+  margin:10px 0;
+}
+
+.login-box button{
+  padding:10px 20px;
+  margin-top:10px;
+  cursor:pointer;
+}
