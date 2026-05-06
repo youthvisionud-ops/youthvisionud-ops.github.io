@@ -415,6 +415,38 @@ if (!t1 || !t2) {
   calculateNRR(t1);
   calculateNRR(t2);
 
+   await supabase
+.from("teams")
+.update({
+  played: t1.played,
+  win: t1.win,
+  loss: t1.loss,
+  points: t1.points,
+  nrr: t1.nrr,
+  runsfor: t1.runsFor,
+  oversfaced: t1.oversFaced,
+  runsagainst: t1.runsAgainst,
+  oversbowled: t1.oversBowled
+})
+.eq("name", t1.name);
+
+await supabase
+.from("teams")
+.update({
+  played: t2.played,
+  win: t2.win,
+  loss: t2.loss,
+  points: t2.points,
+  nrr: t2.nrr,
+  runsfor: t2.runsFor,
+  oversfaced: t2.oversFaced,
+  runsagainst: t2.runsAgainst,
+  oversbowled: t2.oversBowled
+})
+.eq("name", t2.name);
+  });
+
+
   // history add
   matchHistory.push({
   teamA,
@@ -446,7 +478,7 @@ if (!t1 || !t2) {
   
 }
 
-function undoLastMatch(){
+async function undoLastMatch(){
 
   if (matchHistory.length === 0) {
     alert("No matches to undo");
@@ -494,37 +526,7 @@ function undoLastMatch(){
     calculateNRR(t1);
     calculateNRR(t2);
 
-    await supabase
-.from("teams")
-.update({
-  played: t1.played,
-  win: t1.win,
-  loss: t1.loss,
-  points: t1.points,
-  nrr: t1.nrr,
-  runsfor: t1.runsFor,
-  oversfaced: t1.oversFaced,
-  runsagainst: t1.runsAgainst,
-  oversbowled: t1.oversBowled
-})
-.eq("name", t1.name);
-
-await supabase
-.from("teams")
-.update({
-  played: t2.played,
-  win: t2.win,
-  loss: t2.loss,
-  points: t2.points,
-  nrr: t2.nrr,
-  runsfor: t2.runsFor,
-  oversfaced: t2.oversFaced,
-  runsagainst: t2.runsAgainst,
-  oversbowled: t2.oversBowled
-})
-.eq("name", t2.name);
-  });
-
+   
   sortTable();
   renderTable();
   renderHistory();
