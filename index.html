@@ -493,28 +493,42 @@ async function resetTournament(){
 
   if(!confirm("Reset everything?")) return;
 
-  // RESET LOCAL
-  teams = getDefaultTeams();
-  matchHistory = [];
+  // RESET DATABASE TEAMS
+  const { error: teamError } = await client
+    .from("teams")
+    .update({
+      played: 0,
+      win: 0,
+      loss: 0,
+      points: 0,
+      nrr: 0,
+      runsfor: 0,
+      oversfaced: 0,
+      runsagainst: 0,
+      oversbowled: 0
+    })
+    .gt("id", 0);
 
-  // RESET TEAMS IN DATABASE
-  for (const t of teams) {
+  console.log(teamError);
 
-    await client
-      .from("teams")
-      .update({
-        played: 0,
-        win: 0,
-        loss: 0,
-        points: 0,
-        nrr: 0,
-        runsfor: 0,
-        oversfaced: 0,
-        runsagainst: 0,
-        oversbowled: 0
-      })
-      .eq("name", t.name);
-  }
+  // DELETE MATCHES
+  const { error: matchError } = await client
+    .from("matches")
+    .delete()
+    .gt("id", 0);
+
+  console.log(matchError);
+
+  // RELOAD FROM DATABASE
+  await loadData();
+
+  sortTable();
+  renderTable();
+  renderHistory();
+
+  alert("Tournament Reset Successful");
+
+}
 
   // DELETE MATCH HISTORY
   await client
