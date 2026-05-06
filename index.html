@@ -188,7 +188,16 @@
   </table>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script>
+
+const supabaseUrl = "https://jqqvxreeymzkyxbjifvn.supabase.co/rest/v1/";
+const supabaseKey = "sb_publishable_BGiDE5OzjcFID5IaDkrTRg_qxhZc25a";
+
+const supabase = window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+);
 
 let teams = [];
 let matchHistory = [];
@@ -205,12 +214,21 @@ function getDefaultTeams() {
 }
 
 // LOAD
-function loadData() {
-  let t = localStorage.getItem("teams");
-  let h = localStorage.getItem("history");
+async function loadData() {
 
-  teams = t ? JSON.parse(t) : getDefaultTeams();
-  matchHistory = h ? JSON.parse(h) : [];
+  // LOAD TEAMS
+  let { data: teamsData } = await supabase
+    .from("teams")
+    .select("*");
+
+  teams = teamsData || [];
+
+  // LOAD MATCHES
+  let { data: matchData } = await supabase
+    .from("matches")
+    .select("*");
+
+  matchHistory = matchData || [];
 }
 
 // SAVE
