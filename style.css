@@ -71,9 +71,10 @@ header {
 
 .nav-center {
     text-align: center;
-    font-size: 40px;
+    font-size: clamp(20px, 4vw, 40px);
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    line-height: 1.3;
 
     background: linear-gradient(270deg, #ffcc00, #ff0000, #00c6ff, #00ffcc);
     background-size: 600% 600%;
@@ -84,11 +85,13 @@ header {
     animation: gradientMove 6s ease infinite;
 
     text-shadow: 0 0 10px rgba(0,0,0,0.3);
+
+    word-break: break-word;
+    overflow-wrap: break-word;
+
+    max-width: 100%;
 }
-.nav-center:hover {
-    transform: scale(1.05);
-    transition: 0.3s;
-}
+
 @keyframes gradientMove {
     0% {
         background-position: 0% 50%;
@@ -687,6 +690,33 @@ header {
 
   .main-nav a{
     font-size:15px;
+  }
+
+}
+
+/* MOBILE HEADER FINAL FIX */
+
+@media screen and (max-width: 768px){
+
+  .top-nav{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:15px 10px;
+    overflow:hidden;
+  }
+
+  .nav-center{
+    width:100%;
+    font-size:28px;
+    line-height:1.2;
+    padding:0;
+    margin-top:10px;
+  }
+
+  .main-nav ul{
+    gap:20px;
   }
 
 }
